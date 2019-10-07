@@ -21,7 +21,7 @@ void Engine::runEngine(int numPlayers) {
         switch(gameProgress) {
             case START:
                 bool startSuccess;
-                startSuccess = handleStart(currPlayer);
+                startSuccess = handleStart();
                 if (startSuccess) gameProgress = DRAWN;
                 break;
             case DRAWN:
@@ -40,7 +40,7 @@ void Engine::runEngine(int numPlayers) {
                 if (endSuccess) {
                     gameProgress = SCORE;
                 } else {
-                    gameProgress = START;
+                    gameProgress = DRAWN;
                 }
                 break;
             case SCORE:
@@ -76,24 +76,24 @@ void Engine::setup(int numPlayers) {
 // GAME STATE STUFF
 bool Engine::handleStart() {
     std::string line;
-    std::cout << "CURRENTLY PLAYER " << currIndex << "'S TURN\n";
+    
     
     for (unsigned long i = 0; i < players.size(); i++) {
         Player *currPlayer = players[i];
         std::cout << "It is currently Player " << i << "'s turn to flip up two cards.\n";
-        while (player->getFaceUpCount() < 2) {
+        while (currPlayer->getFaceUpCount() < 2) {
             std::cout << "Select one position (0-5) that you would like to reveal: ";
             std::getline(std::cin, line);
             
             if (line.empty()) continue;
 
             int num = stoi(line);
-            if (num > 5 || num < 0 || player->isFaceUp(num)) {
+            if (num > 5 || num < 0 || currPlayer->isFaceUp(num)) {
                 std::cout << "Please enter a valid number.\n";
             } else {
-                player->setOrientation(num, true);
-                player->incrementFaceUpCount();
-                player->printStock();
+                currPlayer->setOrientation(num, true);
+                currPlayer->incrementFaceUpCount();
+                currPlayer->printStock();
             }
         }
     }
@@ -103,7 +103,8 @@ bool Engine::handleStart() {
 bool Engine::handleDraw(Player *player) {
     bool handled = false;
     std::string line;
-    
+    std::cout << "CURRENTLY PLAYER " << currIndex << "'S TURN\n";
+
     std::cout << "Type 'discard' to take from the discard pile. Type 'draw' to draw a new card from the deck.\n";
     while (!handled) {
         std::getline(std::cin, line);
@@ -213,13 +214,6 @@ bool Engine::handleEnd(Player *player) {
 }
 
 bool Engine::handleScore() {
-    // each ace counts 1 point
-    // each two counts minus two points
-    // each numeral card from 3 to 10 scores face value
-    // each jack or queen scores 10 points
-    // each king scores zero points
-    // each pair of equal cards scores zero points 
-    
     std::vector<int> scores;
     for (unsigned long i = 0; i < players.size(); i++) {
         Player * currPlayer = players[i];
