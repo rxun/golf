@@ -16,7 +16,6 @@ void Engine::runEngine(int numPlayers) {
 
     gameState gameProgress = START;
 
-    std::cout << "start game\n";
     while (gameRunning) {
         switch(gameProgress) {
             case START:
