@@ -37,6 +37,8 @@ To randomly generate cards, I made a vector for ints 0-51, then used a function 
 
 With a little more time, checking for duplicates in the stock could have been quicker -- I could have used a hashmap to store duplicates. That would've been much quicker than looping through the seen vector every time. 
 
+I chose the testing library I had because it's lightweight but robust.
+
 ## LIMITATIONS
 Traditionally, a game is nine "holes" (deals), and the player with the lowest total score is the winner, but this will only run for one game. This would be fairly easily implemented within the Engine class, carrying over scores when restarting.
 
